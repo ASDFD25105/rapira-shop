@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapira Drop Shop by Necro</title>
+    <script src="https://telegram.org"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0b0c10; color: #ffffff; padding: 15px; margin: 0; }
+       
+        /* Исправленный и компактный главный баннер сверху */
+        .main-banner {
+            width: 100%;
+            max-height: 250px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(255, 204, 0, 0.15);
+            display: block;
+        }
+       
+        /* Поле ввода никнейма */
+        .nickname-section { background: #1f2833; border: 1px solid #ffcc00; padding: 15px; border-radius: 12px; margin-bottom: 20px; text-align: left; box-shadow: 0 0 10px rgba(255, 204, 0, 0.1); }
+        label { display: block; margin-bottom: 8px; color: #ffcc00; font-size: 14px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
+        input { width: 100%; padding: 12px; box-sizing: border-box; background: #0b0c10; border: 1px solid #45f3ff; border-radius: 8px; color: #fff; font-size: 16px; outline: none; }
+        input:focus { border-color: #ffcc00; box-shadow: 0 0 8px rgba(255, 204, 0, 0.3); }
+       
+        /* Сетка товаров */
+        .shop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+        .product-card { background: #1f2833; border: 1px solid #2c3540; border-radius: 12px; padding: 10px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; transition: 0.2s; }
+        .product-card:hover { border-color: #ffcc00; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(255, 204, 0, 0.2); }
+        .product-card img { width: 100%; border-radius: 8px; object-fit: cover; aspect-ratio: 1/1; }
+        .product-name { font-size: 16px; font-weight: bold; margin: 10px 0 4px 0; color: #fff; text-shadow: 0 0 5px rgba(255,255,255,0.1); }
+        .product-price { font-size: 15px; color: #ffcc00; font-weight: bold; background: rgba(0,0,0,0.3); padding: 4px 0; border-radius: 6px; }
+       
+        .footer-note { font-size: 12px; color: #666; text-align: center; margin-top: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
+    </style>
+</head>
+<body>
+
+    <!-- Главный баннер магазина -->
+    <img class="main-banner" src="banner.png" onerror="this.src='banner.png.jpg'" alt="Rapira Drop Shop by Necro">
+
+    <!-- Ввод никнейма перед покупкой -->
+    <div class="nickname-section">
+        <label for="player-nickname">Ваш точный никнейм в игре:</label>
+        <input type="text" id="player-nickname" placeholder="Например: Necro_Игрок" required>
+    </div>
+
+    <!-- Витрина паков с двойной проверкой расширений -->
+    <div class="shop-grid">
+        <div class="product-card" onclick="buyPack('100G', 100, 30)">
+            <img src="100.png" onerror="this.src='100.png.jpg'" alt="100 Gold">
+            <div class="product-name">100 GOLD</div>
+            <div class="product-price">30 RUB</div>
+        </div>
+       
+        <div class="product-card" onclick="buyPack('500G', 500, 125)">
+            <img src="500.png" onerror="this.src='500.png.jpg'" alt="500 Gold">
+            <div class="product-name">500 GOLD</div>
+            <div class="product-price">125 RUB</div>
+        </div>
+       
+        <div class="product-card" onclick="buyPack('1000G', 1000, 250)">
+            <img src="1000.png" onerror="this.src='1000.png.jpg'" alt="1000 Gold">
+            <div class="product-name">1000 GOLD</div>
+            <div class="product-price">250 RUB</div>
+        </div>
+       
+        <div class="product-card" onclick="buyPack('2000G', 2000, 500)">
+            <img src="2000.png" onerror="this.src='2000.png.jpg'" alt="2000 Gold">
+            <div class="product-name">2000 GOLD</div>
+            <div class="product-price">500 RUB</div>
+        </div>
+    </div>
+
+    <div class="footer-note">После клика откроется оплата СБП / Картой</div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        function buyPack(packName, goldAmount, priceAmount) {
+            const nickInput = document.getElementById('player-nickname');
+            const nickname = nickInput.value.trim();
+
+            if (!nickname) {
+                alert('Пожалуйста, введите ваш никнейм в игре!');
+                nickInput.focus();
+                return;
+            }
+
+            const orderData = {
+                pack: packName,
+                gold: goldAmount,
+                nickname: nickname,
+                price: priceAmount
+            };
+
+            tg.sendData(JSON.stringify(orderData));
+            tg.close();
+        }
+    </script>
+</body>
+</html>
